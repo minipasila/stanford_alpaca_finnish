@@ -11,6 +11,8 @@
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/release/python-390/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
+This is a modified version of the original Stanford Alpaca github repo to work with the current OpenAI API and to be able to generate Finnish datasets instead of English ones. Everything below is from the original repo:
+
 This is the repo for the Stanford Alpaca project, which aims to build and share an instruction-following LLaMA model. The repo contains:
 
 - The [52K data](#data-release) used for fine-tuning the model.
