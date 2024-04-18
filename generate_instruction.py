@@ -19,6 +19,9 @@ from multiprocessing import Pool
 import numpy as np
 import tqdm
 from rouge_score import rouge_scorer
+
+import openai
+
 import utils
 
 import fire
@@ -44,12 +47,16 @@ def encode_prompt(prompt_instructions):
 def post_process_gpt3_response(num_prompt_instructions, response):
     if response is None:
         return []
+    
+    # Default to 'unknown' if 'finish_reason' is not present
+    finish_reason = response.get('finish_reason', 'unknown')
+
     raw_instructions = f"{num_prompt_instructions+1}. Instruction:" + response["text"]
     raw_instructions = re.split("###", raw_instructions)
     instructions = []
     for idx, inst in enumerate(raw_instructions):
-        # if the decoding stops due to length, the last example is likely truncated so we discard it
-        if idx == len(raw_instructions) - 1 and response["finish_reason"] == "length":
+        # Adding the check here using 'finish_reason' instead of accessing directly
+        if idx == len(raw_instructions) - 1 and finish_reason == "length":
             continue
         idx += num_prompt_instructions + 1
         splitted_data = re.split(f"{idx}\.\s+(Instruction|Input|Output):", inst)
@@ -65,24 +72,30 @@ def post_process_gpt3_response(num_prompt_instructions, response):
             continue
         # filter based on keywords that are not suitable for language models.
         blacklist = [
-            "image",
-            "images",
-            "graph",
-            "graphs",
-            "picture",
-            "pictures",
-            "file",
-            "files",
-            "map",
-            "maps",
-            "draw",
-            "plot",
-            "go to",
+            "kuva",
+            "kuvat",
+            "kaaviokuva",
+            "kaavio",
+            "kaaviot",
+            "diagrammi",
+            "diagrammit",
+            "graafi",
+            "graafit",
+            "valokuva",
+            "valokuvat",
+            "tiedosto",
+            "tiedostot",
+            "kartta",
+            "kartat",
+            "piirrä",
+            "mene",
             "video",
             "audio",
-            "music",
-            "flowchart",
-            "diagram",
+            "ääni",
+            "musiikki",
+            "vuokaavio",
+            "prosessikaavio",
+            "kulkukaavio",
         ]
         blacklist += []
         if any(find_word_in_string(word, inst) for word in blacklist):
@@ -110,8 +123,8 @@ def find_word_in_string(w, s):
 def generate_instruction_following_data(
     output_dir="./",
     seed_tasks_path="./seed_tasks.jsonl",
-    num_instructions_to_generate=100,
-    model_name="text-davinci-003",
+    num_instructions_to_generate=5,
+    model_name="gpt-3.5-turbo-instruct",
     num_prompt_instructions=3,
     request_batch_size=5,
     temperature=1.0,

@@ -9,17 +9,14 @@ import json
 from typing import Optional, Sequence, Union
 
 import openai
+from openai import OpenAI
+
+client = OpenAI()
 import tqdm
-from openai import openai_object
 import copy
 
-StrOrOpenAIObject = Union[str, openai_object.OpenAIObject]
-
-openai_org = os.getenv("OPENAI_ORG")
-if openai_org is not None:
-    openai.organization = openai_org
-    logging.warning(f"Switching to organization: {openai_org} for OAI API key.")
-
+# TODO: The 'openai.organization' option isn't read in the client API. You will need to pass it when you instantiate the client, e.g. 'OpenAI(organization=os.getenv("OPENAI_ORG"))'
+# openai.organization = os.getenv("OPENAI_ORG")
 
 @dataclasses.dataclass
 class OpenAIDecodingArguments(object):
@@ -37,16 +34,16 @@ class OpenAIDecodingArguments(object):
 
 
 def openai_completion(
-    prompts: Union[str, Sequence[str], Sequence[dict[str, str]], dict[str, str]],
-    decoding_args: OpenAIDecodingArguments,
-    model_name="text-davinci-003",
+    prompts,
+    decoding_args,
+    model_name="gpt-3.5-turbo-instruct",
     sleep_time=2,
     batch_size=1,
     max_instances=sys.maxsize,
     max_batches=sys.maxsize,
     return_text=False,
     **decoding_kwargs,
-) -> Union[Union[StrOrOpenAIObject], Sequence[StrOrOpenAIObject], Sequence[Sequence[StrOrOpenAIObject]],]:
+):
     """Decode with OpenAI API.
 
     Args:
@@ -103,14 +100,11 @@ def openai_completion(
                     **batch_decoding_args.__dict__,
                     **decoding_kwargs,
                 )
-                completion_batch = openai.Completion.create(prompt=prompt_batch, **shared_kwargs)
-                choices = completion_batch.choices
-
-                for choice in choices:
-                    choice["total_tokens"] = completion_batch.usage.total_tokens
+                completion_batch = client.completions.create(prompt=prompt_batch, **shared_kwargs)
+                choices = [dict(text=choice.text, index=choice.index, total_tokens=completion_batch.usage.total_tokens) for choice in completion_batch.choices]
                 completions.extend(choices)
                 break
-            except openai.error.OpenAIError as e:
+            except openai.OpenAIError as e:
                 logging.warning(f"OpenAIError: {e}.")
                 if "Please reduce your prompt" in str(e):
                     batch_decoding_args.max_tokens = int(batch_decoding_args.max_tokens * 0.8)

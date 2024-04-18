@@ -1,14 +1,14 @@
-You are asked to come up with a set of 20 diverse task instructions. These task instructions will be given to a GPT model and we will evaluate the GPT model for completing the instructions.
+Sinua pyydetään laatimaan 20 monipuolista tehtäväohjetta. Nämä tehtäväohjeet annetaan avustajalle, ja me arvioimme avustajan ohjeiden suorittamisessa.
 
-Here are the requirements:
-1. Try not to repeat the verb for each instruction to maximize diversity.
-2. The language used for the instruction also should be diverse. For example, you should combine questions with imperative instrucitons.
-3. The type of instructions should be diverse. The list should include diverse types of tasks like open-ended generation, classification, editing, etc.
-2. A GPT language model should be able to complete the instruction. For example, do not ask the assistant to create any visual or audio output. For another example, do not ask the assistant to wake you up at 5pm or set a reminder because it cannot perform any action.
-3. The instructions should be in English.
-4. The instructions should be 1 to 2 sentences long. Either an imperative sentence or a question is permitted.
-5. You should generate an appropriate input to the instruction. The input field should contain a specific example provided for the instruction. It should involve realistic data and should not contain simple placeholders. The input should provide substantial content to make the instruction challenging but should ideally not exceed 100 words.
-6. Not all instructions require input. For example, when a instruction asks about some general information, "what is the highest peak in the world", it is not necssary to provide a specific context. In this case, we simply put "<noinput>" in the input field.
-7. The output should be an appropriate response to the instruction and the input. Make sure the output is less than 100 words.
+Vaatimukset ovat seuraavat:
+1. Yritä olla toistamatta verbiä jokaisessa ohjeessa, jotta monimuotoisuus olisi mahdollisimman suuri.
+2. Myös ohjeessa käytetyn kielen tulisi olla monipuolista. Sinun tulisi esimerkiksi yhdistää kysymyksiä ja imperatiivisia ohjeita.
+3. Ohjeiden tyypin tulisi olla monipuolinen. Luettelon tulisi sisältää erilaisia tehtävätyyppejä, kuten avointa generointia, luokittelua, muokkausta jne.
+4. Avustajan pitäisi pystyä suorittamaan ohje. Älä esimerkiksi pyydä avustajaa luomaan mitään visuaalista tai äänituotosta. Toisena esimerkkinä, älä pyydä avustajaa herättämään sinua kello 17.00 tai asettamaan muistutusta, koska se ei pysty suorittamaan mitään toimintoa.
+5. Ohjeiden tulisi olla suomenkielisiä.
+6. Ohjeiden tulisi olla 1-2 lauseen mittaisia. Joko imperatiivilause tai kysymys on sallittu.
+7. Ohjeeseen tulisi luoda sopiva syöttö. Syöttökentän tulisi sisältää ohjeelle annettu konkreettinen esimerkki. Sen tulisi sisältää realistisia tietoja, eikä se saisi sisältää yksinkertaisia placeholdereita. Syötteen tulisi tarjota merkittävää sisältöä, jotta ohje olisi haastava, mutta sen tulisi mieluiten olla enintään 100 sanaa.
+8. Kaikki ohjeet eivät vaadi syöttöä. Esimerkiksi kun ohjeessa kysytään jotain yleistä tietoa, "mikä on maailman korkein huippu", ei ole tarpeen antaa erityistä asiayhteyttä. Tässä tapauksessa syötekenttään merkitään yksinkertaisesti "<noinput>".
+9. Tuotoksen pitäisi olla sopiva vastaus ohjeeseen ja syötteeseen. Varmista, että tuotos on alle 100 sanaa.
 
-List of 20 tasks:
+Luettelo 20 tehtävästä:
